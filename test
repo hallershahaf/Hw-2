@@ -1,0 +1,19 @@
+#!/bin/bash
+
+function create_out() {
+echo "Creating output files..."
+./bp_main ./examples/example1_in.txt > ./output/out1
+diff -q ./examples/example1_out.txt ./output/out1
+./bp_main ./examples/example2_in.txt > ./output/out2
+diff -q ./examples/example2_out.txt ./output/out2
+./bp_main ./examples/example3_in.txt > ./output/out3
+diff -q ./examples/example3_out.txt ./output/out3
+./bp_main ./examples/example4_in.txt > ./output/out4
+diff -q ./examples/example4_out.txt ./output/out4
+./bp_main ./examples/example5_in.txt > ./output/out5
+diff -q ./examples/example5_out.txt ./output/out5
+./bp_main ./examples/example6_in.txt > ./output/out6
+diff -q ./examples/example6_out.txt ./output/out6
+}
+
+create_out

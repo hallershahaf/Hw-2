@@ -1,0 +1,337 @@
+numOfBits is : 5
+PC_mask is 0x1f
+HR_mask is 0x7
+tag_mask is 0x3fffffff
+
+0x17c index is 31
+N 0x180
+The Branch was taken
+history was 0
+State in index 0 was WNT
+State in index 0 is now WT
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 1 and the state is SNT
+N 0x180
+The Branch was taken
+history was 0
+State in index 1 was SNT
+State in index 1 is now WNT
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 5 and the state is SNT
+N 0x180
+The Branch was taken
+history was 0
+State in index 5 was SNT
+State in index 5 is now WNT
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 5 and the state is WNT
+N 0x180
+The Branch was taken
+history was 0
+State in index 5 was WNT
+State in index 5 is now WT
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 5 and the state is WT
+T 0x17c
+The Branch was taken
+history was 0
+State in index 5 was WT
+State in index 5 is now ST
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 5 and the state is ST
+T 0x17c
+The Branch was taken
+history was 0
+State in index 5 was ST
+State in index 5 is now ST
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 5 and the state is ST
+T 0x17c
+The Branch was not taken
+history was 0
+State in index 5 was ST
+State in index 5 is now WT
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 4 and the state is SNT
+N 0x180
+The Branch was not taken
+history was 0
+State in index 4 was SNT
+State in index 4 is now SNT
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 0 and the state is WT
+T 0x17c
+The Branch was not taken
+history was 0
+State in index 0 was WT
+State in index 0 is now WNT
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 0 and the state is WNT
+N 0x180
+The Branch was not taken
+history was 0
+State in index 0 was WNT
+State in index 0 is now SNT
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 0 and the state is SNT
+N 0x180
+The Branch was not taken
+history was 0
+State in index 0 was SNT
+State in index 0 is now SNT
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 0 and the state is SNT
+N 0x180
+The Branch was not taken
+history was 0
+State in index 0 was SNT
+State in index 0 is now SNT
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 0 and the state is SNT
+N 0x180
+The Branch was taken
+history was 0
+State in index 0 was SNT
+State in index 0 is now WNT
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 1 and the state is WNT
+N 0x180
+The Branch was not taken
+history was 0
+State in index 1 was WNT
+State in index 1 is now SNT
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 4 and the state is SNT
+N 0x180
+The Branch was taken
+history was 0
+State in index 4 was SNT
+State in index 4 is now WNT
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 1 and the state is SNT
+N 0x180
+The Branch was not taken
+history was 0
+State in index 1 was SNT
+State in index 1 is now SNT
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 4 and the state is WNT
+N 0x180
+The Branch was taken
+history was 0
+State in index 4 was WNT
+State in index 4 is now WT
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 1 and the state is SNT
+N 0x180
+The Branch was not taken
+history was 0
+State in index 1 was SNT
+State in index 1 is now SNT
+history is now 0
+0x27c index is 31
+
+tags did not match
+N 0x280
+The Branch was taken
+history was 0
+State in index 0 was WNT
+State in index 0 is now WT
+history is now 0
+0x17c index is 31
+
+tags did not match
+N 0x180
+The Branch was taken
+history was 0
+State in index 0 was WT
+State in index 0 is now ST
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 1 and the state is SNT
+N 0x180
+The Branch was taken
+history was 0
+State in index 1 was SNT
+State in index 1 is now WNT
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 5 and the state is WT
+T 0x17c
+The Branch was taken
+history was 0
+State in index 5 was WT
+State in index 5 is now ST
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 5 and the state is ST
+T 0x17c
+The Branch was taken
+history was 0
+State in index 5 was ST
+State in index 5 is now ST
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 5 and the state is ST
+T 0x17c
+The Branch was taken
+history was 0
+State in index 5 was ST
+State in index 5 is now ST
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 5 and the state is ST
+T 0x17c
+The Branch was taken
+history was 0
+State in index 5 was ST
+State in index 5 is now ST
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 5 and the state is ST
+T 0x17c
+The Branch was not taken
+history was 0
+State in index 5 was ST
+State in index 5 is now WT
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 4 and the state is WT
+T 0x17c
+The Branch was not taken
+history was 0
+State in index 4 was WT
+State in index 4 is now WNT
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 0 and the state is ST
+T 0x17c
+The Branch was not taken
+history was 0
+State in index 0 was ST
+State in index 0 is now WT
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 0 and the state is WT
+T 0x17c
+The Branch was not taken
+history was 0
+State in index 0 was WT
+State in index 0 is now WNT
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 0 and the state is WNT
+N 0x180
+The Branch was not taken
+history was 0
+State in index 0 was WNT
+State in index 0 is now SNT
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 0 and the state is SNT
+N 0x180
+The Branch was not taken
+history was 0
+State in index 0 was SNT
+State in index 0 is now SNT
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 0 and the state is SNT
+N 0x180
+The Branch was taken
+history was 0
+State in index 0 was SNT
+State in index 0 is now WNT
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 1 and the state is WNT
+N 0x180
+The Branch was not taken
+history was 0
+State in index 1 was WNT
+State in index 1 is now SNT
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 4 and the state is WNT
+N 0x180
+The Branch was taken
+history was 0
+State in index 4 was WNT
+State in index 4 is now WT
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 1 and the state is SNT
+N 0x180
+The Branch was not taken
+history was 0
+State in index 1 was SNT
+State in index 1 is now SNT
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 4 and the state is WT
+T 0x17c
+The Branch was taken
+history was 0
+State in index 4 was WT
+State in index 4 is now ST
+history is now 0
+0x17c index is 31
+Using LSB Share
+table_index is 1 and the state is SNT
+N 0x180
+The Branch was not taken
+history was 0
+State in index 1 was SNT
+State in index 1 is now SNT
+history is now 0
+flush_num: 18, br_num: 37, size: 2032b

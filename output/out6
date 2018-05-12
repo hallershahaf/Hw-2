@@ -1,0 +1,92 @@
+numOfBits is : 1
+PC_mask is 0x1
+HR_mask is 0x3
+tag_mask is 0x3fffffff
+
+0xf0 index is 0
+N 0xf4
+The Branch was taken
+history was 0
+State in index 0 was WNT
+State in index 0 is now WT
+history is now 1
+0xf0 index is 0
+Using MSB Share
+table_index is 1 and the state is SNT
+N 0xf4
+The Branch was taken
+history was 1
+State in index 1 was SNT
+State in index 1 is now WNT
+history is now 1
+0xf0 index is 0
+Using MSB Share
+table_index is 1 and the state is WNT
+N 0xf4
+The Branch was taken
+history was 1
+State in index 1 was WNT
+State in index 1 is now WT
+history is now 1
+0xf0 index is 0
+Using MSB Share
+table_index is 1 and the state is WT
+T 0x120
+The Branch was taken
+history was 1
+State in index 1 was WT
+State in index 1 is now ST
+history is now 1
+0xf0 index is 0
+Using MSB Share
+table_index is 1 and the state is ST
+T 0x120
+The Branch was taken
+history was 1
+State in index 1 was ST
+State in index 1 is now ST
+history is now 1
+0xff index is 1
+N 0x103
+The Branch was not taken
+history was 1
+State in index 1 was ST
+State in index 1 is now WT
+history is now 0
+0xff index is 1
+Using MSB Share
+table_index is 0 and the state is WT
+T 0x124
+The Branch was not taken
+history was 0
+State in index 0 was WT
+State in index 0 is now WNT
+history is now 0
+0xff index is 1
+Using MSB Share
+table_index is 0 and the state is WNT
+N 0x103
+The Branch was not taken
+history was 0
+State in index 0 was WNT
+State in index 0 is now SNT
+history is now 0
+0xff index is 1
+Using MSB Share
+table_index is 0 and the state is SNT
+N 0x103
+The Branch was not taken
+history was 0
+State in index 0 was SNT
+State in index 0 is now SNT
+history is now 0
+0xff index is 1
+Using MSB Share
+table_index is 0 and the state is SNT
+N 0x103
+The Branch was not taken
+history was 0
+State in index 0 was SNT
+State in index 0 is now SNT
+history is now 0
+flush_num: 4, br_num: 10, size: 130b
