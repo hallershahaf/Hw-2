@@ -10,7 +10,6 @@
 #include <stdio.h>
 
 // Defines and the likes...
-
 #define DEBUG( ... ); printf( __VA_ARGS__ );
 
 #define MAX_HISTORY_SIZE 8
@@ -161,6 +160,8 @@ bad_alloc:
 }
 
 bool BP_predict(uint32_t pc, uint32_t *dst){
+
+	/*Should that be counted in BP_update ?*/
 	numOfBranches++;
 
 	int index = (pc >> 2) & PC_mask;
@@ -176,8 +177,8 @@ bool BP_predict(uint32_t pc, uint32_t *dst){
 
 	int tag = btbTable[index].tag;
 	int pc_tag = (pc >> 2) & tag_mask;
-	// In the case that (tag == 0), not point in even checking.
-	if ((tag != 0) && (pc_tag != tag)) {
+	// In the case that (TagSize == 0), not point in even checking.
+	if ((TagSize != 0) && (pc_tag != tag)) {
 		DEBUG("\ntags did not match\n");
 		zeroEntry(index);
 		goto not_taken;
@@ -235,9 +236,9 @@ void BP_update(uint32_t pc, uint32_t targetPc, bool taken, uint32_t pred_dst){
 	// Tried using -- and ++ here. Would have made the code way shorter,
 	// But big meanie C wouldn't let me.
 	DEBUG("The Branch was %s\n", (taken) ? "taken" : "not taken");
-	DEBUG("history was %d\n", global_HR);
+	DEBUG("history was %d\n", *history);
 	DEBUG("State in index %d was %s\n", *history, StateToString[*(table)[(int)(*history)]]);
-	switch (*(table)[(int)(*history)]) {
+	switch ( *(table)[ (*history) ] ) {
 		case (SNT):
 			if (taken) {
 				*(table)[(int)(*history)] = WNT;
@@ -268,9 +269,8 @@ void BP_update(uint32_t pc, uint32_t targetPc, bool taken, uint32_t pred_dst){
 
 	//Update history
 	int added_bit = (taken) ? 1 : 0;
-	*history = ((*history << 2) + added_bit) & HR_mask;
-	DEBUG("history is now %d\n", global_HR);
-
+	*history = ((*history << 1) + added_bit) & HR_mask;
+	DEBUG("history is now %d\n", *history);
 	// Update dst pc
 	btb_entry->dst_pc = targetPc;
 

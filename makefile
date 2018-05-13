@@ -5,11 +5,11 @@ all: bp_main
 
 # Environment for C 
 CC = gcc
-CFLAGS = -std=c99 -Wall
+CFLAGS = -std=c99 -Wall -g
 
 # Environment for C++ 
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall
+CXXFLAGS = -std=c++11 -Wall -g
 
 # Automatically detect whether the bp is C or C++
 # Must have either bp.c or bp.cpp - NOT both
