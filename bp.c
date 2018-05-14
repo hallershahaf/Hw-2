@@ -9,8 +9,13 @@
 #include <string.h>
 #include <stdio.h>
 
+// DEBUGGING TOOLS
+
+// DEBUG( ... ); printf( __VA_ARGS__ );
+// static const char  *StateToString[] = {"SNT", "WNT", "WT", "ST"};
+
+
 // Defines and the likes...
-#define DEBUG( ... ); //printf( __VA_ARGS__ );
 
 #define MAX_HISTORY_SIZE 8
 #define MAX_TABLE_SIZE 256
@@ -25,8 +30,6 @@ typedef enum {
 	ST
 } TakenState;
 
-//static const char  *StateToString[] = {"SNT", "WNT", "WT", "ST"};
-
 // No reference to this on the pdf,
 // so I am using what I found in "bp_main.c"
 typedef enum {
@@ -36,15 +39,12 @@ typedef enum {
 } ShareState;
 
 typedef struct {
-	// Don't know how clear entries will act, so we just check
-	// Not sure if we actually need this.
-	bool valid;
 	// Tag has a max of 30 bits, so we can use int
 	int tag;
 	// Not always needed, but we allocate anyway to ease coding.
 	int history;
-	// for Dst pc we technically only need 30 bits, but to keep it uniform
-	// we will use 32
+	// We need use 32 bits for dst_pc,
+	// though technically we can do with 30
 	uint32_t dst_pc;
 } BTBEntry;
 
@@ -54,21 +54,19 @@ typedef	TakenState StateTable[MAX_TABLE_SIZE];
 
 // Global Vars
 
-// Need to be kept to calculate how many bits were required
-// for the system.
-// Possibly for other things as well.
+// These are needed for overall predictor bit count, and for
+// various mask calculations.
 int BTBSize;    // Possible values are 1,2,4,8,16,32
 int HRSize;     // Possible values are 1...8
 int TagSize;    // Possible values are 0...30
 
-int global_HR; // max of 8 bits required
+int global_HR; // Max of 8 bits required
 unsigned int PC_mask;   // So we can find the correct index from the pc
 unsigned int HR_mask;   // In order to prevent overflow of history registers.
-unsigned int tag_mask;  // so we can compare PC and tags.
-unsigned int xor_mask;  // so we can use the pc at the size of the history register
+unsigned int tag_mask;  // So we can compare PC and tags.
 
 bool decision;  // This is so we won't have to find the prediction both for 
-				// predict and update.
+				// predict and for update.
 
 BTBEntry* btbTable = NULL;
 StateTable* stateArray = NULL;
@@ -93,10 +91,7 @@ void zeroEntry(int index) {
 
 	memset(&btbTable[index], 0, sizeof(BTBEntry));
 
-	btbTable[index].valid = true; // If we zero an entry, then we know it's valid.
-
-	if (!globalTable) { // if the state table is not shared, we want to zero that too
-		DEBUG("Zeroing the state table in index %d\n", index);
+	if (!globalTable) { // If the state table is not shared, we want to zero that too
 		for (int i = 0; i < MAX_TABLE_SIZE; i++) {
 			(stateArray[index])[i] = WNT;
 		}
@@ -117,15 +112,9 @@ int BP_init(unsigned btbSize, unsigned historySize, unsigned tagSize,
 	globalTable = isGlobalTable;
 
 	int numOfBits = log2(BTBSize);
-	DEBUG("numOfBits is : %d\n", numOfBits);
 	PC_mask = 0x1f >> (MAX_BTB_BITS - numOfBits);
-	DEBUG("PC_mask is 0x%x\n", PC_mask);
 	HR_mask = 0xff >> (MAX_HISTORY_SIZE - historySize);
-	DEBUG("HR_mask is 0x%x\n", HR_mask);
 	tag_mask = 0xffffffff >> (32 - tagSize);
-	DEBUG("tag_mask is 0x%x\n", tag_mask);
-	xor_mask = 0xff >> (MAX_HISTORY_SIZE - historySize);
-	DEBUG("xor_mask is 0x%x\n\n", xor_mask);
 
 	global_HR = 0;
 	shareState = Shared;
@@ -135,10 +124,7 @@ int BP_init(unsigned btbSize, unsigned historySize, unsigned tagSize,
 	if (!btbTable)
 		goto bad_alloc;
 
-	// Should dst pc be 0 on init?
-	// That would mean that first branch predicts always give 0.
-	// Clarification - Init entry will always give WNT, so its fine. 
-	memset(btbTable, 0, btbSize * sizeof(BTBEntry)); // init
+	memset(btbTable, 0, btbSize * sizeof(BTBEntry));
 
 	// Now to allocate either 1 or btbSize state tables.
 	int tableSize = (isGlobalTable) ? 1 : btbSize;
@@ -146,7 +132,6 @@ int BP_init(unsigned btbSize, unsigned historySize, unsigned tagSize,
 	if (!stateArray)
 		goto bad_alloc;
 
-	// not sure how to use memset when not setting all to 0
 	for (int i = 0; i < tableSize; i++) {
 		for (int j = 0; j < (MAX_TABLE_SIZE); j++) {
 			(stateArray[i])[j] = WNT;
@@ -164,49 +149,30 @@ bad_alloc:
 
 bool BP_predict(uint32_t pc, uint32_t *dst){
 
-	/*Should that be counted in BP_update ?*/
 	numOfBranches++;
 
 	int index = (pc >> 2) & PC_mask;
-	DEBUG("index is %d\n", index);
-
-	// We want to check if we have a valid entry.
-	// So we check valid flag to see if info is relevant,
-	// and then compare tags.
-	if (!btbTable[index].valid) {
-		btbTable[index].valid = true;
-		goto not_taken;
-	}
 
 	int tag = btbTable[index].tag;
 	int pc_tag = (pc >> 2) & tag_mask;
+
 	// In the case that (TagSize == 0), not point in even checking.
 	if ((TagSize != 0) && (pc_tag != tag)) {
-		DEBUG("\ntags did not match\n");
 		zeroEntry(index);
 		goto not_taken;
 	}
 
-	// Don't know why C didn't let me stateArray[index].
-	// I prob should've listened more in MTM.
 	StateTable* table = (globalTable) ? stateArray : (stateArray + index);
-
 	int table_index = (globalHist) ? global_HR : (btbTable[index].history);
 
-	// no need to check for GlobalTable because input is assumed correct.
 	if (globalTable && shareState == LSB_SHARE) {
-		DEBUG("Using LSB Share\n");
-		DEBUG("Index was 0x%x, pc is 0x%x, pc after mask is 0x%x\n", table_index, pc, ((pc >> 2) & HR_mask));
 		table_index ^= (pc >> 2) & HR_mask;
-		DEBUG("Now index is 0x%x\n", table_index);
 	}
 	if (globalTable && shareState == MSB_SHARE) {
-		DEBUG("Using MSB Share\n");
 		table_index ^= (pc >> 16) & HR_mask;
 	}
 
 	TakenState state = (*table)[table_index];
-	DEBUG("table_index is %d and the state is %s\n", table_index, StateToString[state]);
 
 	if (state == WT || state == ST) {
 		*dst = btbTable[index].dst_pc;
@@ -237,8 +203,6 @@ void BP_update(uint32_t pc, uint32_t targetPc, bool taken, uint32_t pred_dst){
 	int *history = (globalHist) ? &global_HR : &(btb_entry->history);
 	int table_index = *history;
 
-	// history points to our state table, we might need to xor
-	// this value first
 	if (globalTable && shareState == LSB_SHARE) {
 		table_index ^= (pc >> 2) & HR_mask;
 	}
@@ -247,12 +211,7 @@ void BP_update(uint32_t pc, uint32_t targetPc, bool taken, uint32_t pred_dst){
 	}
 
 	// Update relevant state
-	// Tried using -- and ++ here. Would have made the code way shorter,
-	// But big meanie C wouldn't let me.
-	DEBUG("The Branch was %s\n", (taken) ? "taken" : "not taken");
-	DEBUG("history was %d\n", *history);
-	DEBUG("State in index %d was %s\n", table_index, StateToString[(*table)[table_index]]);
-	switch ( (*table)[table_index] ) {
+	switch ((*table)[table_index]) {
 		case (SNT):
 			if (taken) {
 				(*table)[table_index] = WNT;
@@ -279,13 +238,12 @@ void BP_update(uint32_t pc, uint32_t targetPc, bool taken, uint32_t pred_dst){
 				(*table)[table_index] = WT;
 			}
 	}
-	DEBUG("State in index %d is now %s\n", table_index, StateToString[(*table)[table_index]]);
 
 	//Update history
 	int added_bit = (taken) ? 1 : 0;
 	*history = ((*history << 1) + added_bit) & HR_mask;
-	DEBUG("history is now %d\n", *history);
-	// Update dst pc
+
+	// Update dst_pc
 	btb_entry->dst_pc = targetPc;
 
 	return;
