@@ -194,13 +194,13 @@ bool BP_predict(uint32_t pc, uint32_t *dst){
 	int table_index = (globalHist) ? global_HR : (btbTable[index].history);
 
 	// no need to check for GlobalTable because input is assumed correct.
-	if (shareState == LSB_SHARE) {
+	if (globalTable && shareState == LSB_SHARE) {
 		DEBUG("Using LSB Share\n");
-		table_index ^= (pc >> 2) & xor_mask;
+		table_index ^= (pc >> 2) & HR_mask;
 	}
-	if (shareState == MSB_SHARE) {
+	if (globalTable && shareState == MSB_SHARE) {
 		DEBUG("Using MSB Share\n");
-		table_index ^= (pc >> 16) & xor_mask;
+		table_index ^= (pc >> 16) & HR_mask;
 	}
 
 	TakenState state = (*table)[table_index];
@@ -233,6 +233,15 @@ void BP_update(uint32_t pc, uint32_t targetPc, bool taken, uint32_t pred_dst){
 
 	StateTable* table = (globalTable) ? &(stateArray[0]) : &(stateArray[index]);
 	int* history = (globalHist) ? &global_HR : &(btb_entry->history);
+
+	// history points to our state table, we might need to xor
+	// this value first
+	if (globalTable && shareState == LSB_SHARE) {
+		*(history) ^= (pc >> 2) & HR_mask;
+	}
+	if (globalTable && shareState == MSB_SHARE) {
+		*(history) ^= (pc >> 16) & HR_mask;
+	}
 
 	// Update relevant state
 	// Tried using -- and ++ here. Would have made the code way shorter,
