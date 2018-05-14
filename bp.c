@@ -10,7 +10,7 @@
 #include <stdio.h>
 
 // Defines and the likes...
-#define DEBUG( ... ); printf( __VA_ARGS__ );
+#define DEBUG( ... ); //printf( __VA_ARGS__ );
 
 #define MAX_HISTORY_SIZE 8
 #define MAX_TABLE_SIZE 256
@@ -25,7 +25,7 @@ typedef enum {
 	ST
 } TakenState;
 
-static const char  *StateToString[] = {"SNT", "WNT", "WT", "ST"};
+//static const char  *StateToString[] = {"SNT", "WNT", "WT", "ST"};
 
 // No reference to this on the pdf,
 // so I am using what I found in "bp_main.c"
@@ -64,7 +64,8 @@ int TagSize;    // Possible values are 0...30
 int global_HR; // max of 8 bits required
 unsigned int PC_mask;   // So we can find the correct index from the pc
 unsigned int HR_mask;   // In order to prevent overflow of history registers.
-unsigned int tag_mask;   // so we can compare PC and tags.
+unsigned int tag_mask;  // so we can compare PC and tags.
+unsigned int xor_mask;  // so we can use the pc at the size of the history register
 
 bool decision;  // This is so we won't have to find the prediction both for 
 				// predict and update.
@@ -122,7 +123,9 @@ int BP_init(unsigned btbSize, unsigned historySize, unsigned tagSize,
 	HR_mask = 0xff >> (MAX_HISTORY_SIZE - historySize);
 	DEBUG("HR_mask is 0x%x\n", HR_mask);
 	tag_mask = 0xffffffff >> (32 - tagSize);
-	DEBUG("tag_mask is 0x%x\n\n", tag_mask);
+	DEBUG("tag_mask is 0x%x\n", tag_mask);
+	xor_mask = 0xff >> (MAX_HISTORY_SIZE - historySize);
+	DEBUG("xor_mask is 0x%x\n\n", xor_mask);
 
 	global_HR = 0;
 	shareState = Shared;
@@ -191,7 +194,6 @@ bool BP_predict(uint32_t pc, uint32_t *dst){
 	int table_index = (globalHist) ? global_HR : (btbTable[index].history);
 
 	// no need to check for GlobalTable because input is assumed correct.
-	int xor_mask = 0xffff >> (PC_SIZE - HRSize);
 	if (shareState == LSB_SHARE) {
 		DEBUG("Using LSB Share\n");
 		table_index ^= (pc >> 2) & xor_mask;

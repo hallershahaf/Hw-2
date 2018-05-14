@@ -1,84 +1,11 @@
-numOfBits is : 1
-PC_mask is 0x1
-HR_mask is 0x3
-tag_mask is 0x3fffffff
-
-0x10 index is 0
-N 0x14
-The Branch was taken
-history was 0
-State in index 0 was WNT
-State in index 0 is now WT
-history is now 1
-0x10 index is 0
-table_index is 1 and the state is SNT
-N 0x14
-The Branch was taken
-history was 1
-State in index 1 was SNT
-State in index 1 is now WNT
-history is now 1
-0x10 index is 0
-table_index is 1 and the state is WNT
-N 0x14
-The Branch was taken
-history was 1
-State in index 1 was WNT
-State in index 1 is now WT
-history is now 1
-0x10 index is 0
-table_index is 1 and the state is WT
-T 0x20
-The Branch was taken
-history was 1
-State in index 1 was WT
-State in index 1 is now ST
-history is now 1
-0x10 index is 0
-table_index is 1 and the state is ST
-T 0x20
-The Branch was taken
-history was 1
-State in index 1 was ST
-State in index 1 is now ST
-history is now 1
-0x14 index is 1
-N 0x18
-The Branch was not taken
-history was 1
-State in index 1 was ST
-State in index 1 is now WT
-history is now 0
-0x14 index is 1
-table_index is 0 and the state is WT
-T 0x24
-The Branch was not taken
-history was 0
-State in index 0 was WT
-State in index 0 is now WNT
-history is now 0
-0x14 index is 1
-table_index is 0 and the state is WNT
-N 0x18
-The Branch was not taken
-history was 0
-State in index 0 was WNT
-State in index 0 is now SNT
-history is now 0
-0x14 index is 1
-table_index is 0 and the state is SNT
-N 0x18
-The Branch was not taken
-history was 0
-State in index 0 was SNT
-State in index 0 is now SNT
-history is now 0
-0x14 index is 1
-table_index is 0 and the state is SNT
-N 0x18
-The Branch was not taken
-history was 0
-State in index 0 was SNT
-State in index 0 is now SNT
-history is now 0
+0x10 N 0x14
+0x10 N 0x14
+0x10 N 0x14
+0x10 T 0x20
+0x10 T 0x20
+0x14 N 0x18
+0x14 N 0x18
+0x14 T 0x24
+0x14 N 0x18
+0x14 N 0x18
 flush_num: 4, br_num: 10, size: 130b
