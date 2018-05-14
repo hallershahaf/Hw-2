@@ -196,7 +196,9 @@ bool BP_predict(uint32_t pc, uint32_t *dst){
 	// no need to check for GlobalTable because input is assumed correct.
 	if (globalTable && shareState == LSB_SHARE) {
 		DEBUG("Using LSB Share\n");
+		DEBUG("Index was 0x%x, pc is 0x%x, pc after mask is 0x%x\n", table_index, pc, ((pc >> 2) & HR_mask));
 		table_index ^= (pc >> 2) & HR_mask;
+		DEBUG("Now index is 0x%x\n", table_index);
 	}
 	if (globalTable && shareState == MSB_SHARE) {
 		DEBUG("Using MSB Share\n");
@@ -232,15 +234,16 @@ void BP_update(uint32_t pc, uint32_t targetPc, bool taken, uint32_t pred_dst){
 	btb_entry->tag = new_tag;
 
 	StateTable* table = (globalTable) ? &(stateArray[0]) : &(stateArray[index]);
-	int* history = (globalHist) ? &global_HR : &(btb_entry->history);
+	int *history = (globalHist) ? &global_HR : &(btb_entry->history);
+	int table_index = *history;
 
 	// history points to our state table, we might need to xor
 	// this value first
 	if (globalTable && shareState == LSB_SHARE) {
-		*(history) ^= (pc >> 2) & HR_mask;
+		table_index ^= (pc >> 2) & HR_mask;
 	}
 	if (globalTable && shareState == MSB_SHARE) {
-		*(history) ^= (pc >> 16) & HR_mask;
+		table_index ^= (pc >> 16) & HR_mask;
 	}
 
 	// Update relevant state
@@ -248,35 +251,35 @@ void BP_update(uint32_t pc, uint32_t targetPc, bool taken, uint32_t pred_dst){
 	// But big meanie C wouldn't let me.
 	DEBUG("The Branch was %s\n", (taken) ? "taken" : "not taken");
 	DEBUG("history was %d\n", *history);
-	DEBUG("State in index %d was %s\n", *history, StateToString[(*table)[(*history)]]);
-	switch ( (*table)[ (*history) ] ) {
+	DEBUG("State in index %d was %s\n", table_index, StateToString[(*table)[table_index]]);
+	switch ( (*table)[table_index] ) {
 		case (SNT):
 			if (taken) {
-				(*table)[(*history)] = WNT;
+				(*table)[table_index] = WNT;
 			}
 			break;
 		case (WNT):
 			if (taken) {
-				(*table)[(*history)] = WT;
+				(*table)[table_index] = WT;
 			}
 			else {
-				(*table)[(*history)] = SNT;
+				(*table)[table_index] = SNT;
 			}
 			break;
 		case(WT):
 			if (taken) {
-				(*table)[(*history)] = ST;
+				(*table)[table_index] = ST;
 			}
 			else {
-				(*table)[(*history)] = WNT;
+				(*table)[table_index] = WNT;
 			}
 			break;
 		case(ST):
 			if (!taken) {
-				(*table)[(*history)] = WT;
+				(*table)[table_index] = WT;
 			}
 	}
-	DEBUG("State in index %d is now %s\n", *history, StateToString[(*table)[(*history)]]);
+	DEBUG("State in index %d is now %s\n", table_index, StateToString[(*table)[table_index]]);
 
 	//Update history
 	int added_bit = (taken) ? 1 : 0;

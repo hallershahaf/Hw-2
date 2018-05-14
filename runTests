@@ -7,9 +7,9 @@ MY_OUT_DIR_NAME="my_out"
 OUT_BIN="bp_main"
 
 echo -e 'converting tests to UNIX format: '
-dos2unix $INPUT_DIR/*
+#dos2unix $INPUT_DIR/*
 echo -e 'converting source to UNIX format: '
-dos2unix *.h *.c *.cpp
+#dos2unix *.h *.c *.cpp
 echo -e 'building... '
 make clean
 make

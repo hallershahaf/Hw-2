@@ -1,6 +1,8 @@
 #!/bin/bash
 
 function create_out() {
+make clean > /dev/null
+make > /dev/null
 echo "Creating output files..."
 ./bp_main ./examples/example1_in.txt > ./output/out1
 diff -q ./examples/example1_out.txt ./output/out1
