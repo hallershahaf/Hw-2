@@ -201,7 +201,7 @@ bool BP_predict(uint32_t pc, uint32_t *dst){
 		table_index ^= (pc >> 16) & xor_mask;
 	}
 
-	TakenState state = *(table)[table_index];
+	TakenState state = (*table)[table_index];
 	DEBUG("table_index is %d and the state is %s\n", table_index, StateToString[state]);
 
 	if (state == WT || state == ST) {
@@ -237,35 +237,35 @@ void BP_update(uint32_t pc, uint32_t targetPc, bool taken, uint32_t pred_dst){
 	// But big meanie C wouldn't let me.
 	DEBUG("The Branch was %s\n", (taken) ? "taken" : "not taken");
 	DEBUG("history was %d\n", *history);
-	DEBUG("State in index %d was %s\n", *history, StateToString[*(table)[(int)(*history)]]);
-	switch ( *(table)[ (*history) ] ) {
+	DEBUG("State in index %d was %s\n", *history, StateToString[(*table)[(*history)]]);
+	switch ( (*table)[ (*history) ] ) {
 		case (SNT):
 			if (taken) {
-				*(table)[(int)(*history)] = WNT;
+				(*table)[(*history)] = WNT;
 			}
 			break;
 		case (WNT):
 			if (taken) {
-				*(table)[(int)(*history)] = WT;
+				(*table)[(*history)] = WT;
 			}
 			else {
-				*(table)[(int)(*history)] = SNT;
+				(*table)[(*history)] = SNT;
 			}
 			break;
 		case(WT):
 			if (taken) {
-				*(table)[(int)(*history)] = ST;
+				(*table)[(*history)] = ST;
 			}
 			else {
-				*(table)[(int)(*history)] = WNT;
+				(*table)[(*history)] = WNT;
 			}
 			break;
 		case(ST):
 			if (!taken) {
-				*(table)[(int)(*history)] = WT;
+				(*table)[(*history)] = WT;
 			}
 	}
-	DEBUG("State in index %d is now %s\n", *history, StateToString[*(table)[(int)(*history)]]);
+	DEBUG("State in index %d is now %s\n", *history, StateToString[(*table)[(*history)]]);
 
 	//Update history
 	int added_bit = (taken) ? 1 : 0;
